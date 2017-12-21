@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.company.frame.MainFrame">
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="1311" height="778"/>
+    </constraints>
+    <properties>
+      <background color="-1576198"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="55c5b" binding="northPanel" layout-manager="FlowLayout" hgap="0" vgap="5" flow-align="0">
+        <constraints border-constraint="North"/>
+        <properties>
+          <preferredSize width="24" height="100"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="2729f" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints/>
+            <properties>
+              <background color="-9856870"/>
+              <preferredSize width="300" height="100"/>
+            </properties>
+            <border type="none"/>
+            <children/>
+          </grid>
+          <grid id="e6544" binding="menuPanel" layout-manager="FlowLayout" hgap="0" vgap="5" flow-align="0">
+            <constraints/>
+            <properties>
+              <background color="-15024996"/>
+              <preferredSize width="1200" height="100"/>
+            </properties>
+            <border type="none"/>
+            <children/>
+          </grid>
+        </children>
+      </grid>
+      <grid id="f1bc8" binding="westPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints border-constraint="West"/>
+        <properties>
+          <background color="-9856870"/>
+          <preferredSize width="300" height="24"/>
+        </properties>
+        <border type="none"/>
+        <children/>
+      </grid>
+      <grid id="f3e7" binding="centerPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </grid>
+    </children>
+  </grid>
+</form>
