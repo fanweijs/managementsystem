@@ -1,5 +1,7 @@
 package com.company.dao;
 
+import com.company.model.Salary;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -53,5 +55,30 @@ public interface SalaryBaseDAO {
      *
      */
     List<Integer>getRpAllItem(String account)throws SQLException;
+
+    /**
+     * 获取个人的工资记录
+     * @param account
+     * @return
+     * @throws SQLException
+     */
+    List<Salary>getPersonSalary(String account)throws SQLException;
+
+    /**
+     * 管理员模糊查询
+     * 账号
+     * @param keywords
+     * @return
+     * @throws SQLException
+     */
+    List<Salary> queryLike(String keywords) throws SQLException;
+
+    /**
+     * 获取所有员工薪资
+     * @return
+     * @throws SQLException
+     */
+    List<Salary>getAllSalary()throws SQLException;
+
 
 }

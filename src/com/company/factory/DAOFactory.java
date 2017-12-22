@@ -19,5 +19,8 @@ public class DAOFactory {
     public static InfoDAO getInfoDAOInstance() {
         return new InfoDAOImpl();
     }
+    public static SalaryBaseDAO getSalaryBaseInstance(){
+        return  new SalaryBaseDAOImpl();
+    }
 
 }

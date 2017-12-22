@@ -1,13 +1,7 @@
 package com.company.factory;
 
-import com.company.service.AdminService;
-import com.company.service.CheckingService;
-import com.company.service.EmployeeService;
-import com.company.service.RpService;
-import com.company.service.impl.AdminServiceImpl;
-import com.company.service.impl.CheckingServiceImpl;
-import com.company.service.impl.EmployeeServiceImpl;
-import com.company.service.impl.RpServiceImpl;
+import com.company.service.*;
+import com.company.service.impl.*;
 
 public class ServiceFactory {
     public static AdminService getAdminSericeInstance(){
@@ -21,6 +15,13 @@ public class ServiceFactory {
     }
     public static RpService getRpServiceInstance(){
         return new RpServiceImpl();
+    }
+
+    public static UserService getUserSerivceInstance(){
+        return new UserServiceImpl();
+    }
+    public static FinancialAdmin getFinanicalAdminInstance(){
+        return  new FinancialAdminImpl();
     }
 
 }
