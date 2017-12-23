@@ -31,6 +31,7 @@ public class ArciviesPanel extends JPanel implements ActionListener{
     private String account;
     private java.util.List<Employee>employees=new ArrayList<>();
     private EmployeeService employeeService= ServiceFactory.getEmployeeServiceInstance();
+    private int[] rows;
 
     public ArciviesPanel(List<String>arciviesList,String account)  {
         this.account=account;
@@ -67,6 +68,9 @@ public class ArciviesPanel extends JPanel implements ActionListener{
 
     }
     public JPanel getCard1(){
+        Employee employee;
+        int size=14;
+        JPanel jPanels[]=new JPanel[size];
         card1 = new JPanel();
         card1.setBackground(Color.gray);
         card1.setLayout(new BorderLayout());
@@ -74,13 +78,10 @@ public class ArciviesPanel extends JPanel implements ActionListener{
         JPanel northPanel=new JPanel();
         northPanel.setPreferredSize(new Dimension(card1.getWidth(),100));
         JLabel avatarLabel=new JLabel();
-        //avatarLabel.setIcon(new ImageIcon());
         card1.add(BorderLayout.NORTH,northPanel);
         // south 网格布局
         JPanel southPanel=new JPanel();
         southPanel.setLayout(new GridLayout(13,1));
-
-
         return  card1;
     }
     public JPanel getCard2()  {
@@ -154,15 +155,18 @@ public class ArciviesPanel extends JPanel implements ActionListener{
         for(int i=0;i<2;i++){
             jButtons[i].setPreferredSize(new Dimension(120,40));
         }
+
         southPanel.setPreferredSize(new Dimension(card2.getWidth(),150));
         card2.add(BorderLayout.SOUTH,southPanel);
-
+        //搜索框按钮监听
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String keywords=searchField.getText();
-                try{
-                    employees=employeeService
+                employees=employeeService.queryLike(keywords);
+                int count=dtm.getRowCount();
+                for (int i=count-1;i>=1;i++){
+                    dtm.removeRow(i);
                 }
             }
         });
@@ -188,6 +192,7 @@ public class ArciviesPanel extends JPanel implements ActionListener{
 
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("个人档案")){
@@ -198,6 +203,13 @@ public class ArciviesPanel extends JPanel implements ActionListener{
         }
         if (e.getActionCommand().equals("添加员工档案")){
             card.show(centerPanel,"3");
+        }
+
+        if (e.getActionCommand().equals("修改")){
+
+        }
+        if (e.getActionCommand().equals("删除")){
+
         }
     }
 }
