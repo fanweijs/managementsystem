@@ -1,9 +1,12 @@
 package com.company.frame;
 
 import com.company.dao.CheckingDAO;
+import com.company.dao.EmployeeDAO;
 import com.company.factory.ServiceFactory;
 import com.company.model.Checking;
+import com.company.model.Employee;
 import com.company.service.CheckingService;
+import com.company.service.EmployeeService;
 import com.company.service.impl.CheckingServiceImpl;
 
 import javax.swing.*;
@@ -12,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,12 +29,13 @@ public class CheckPanel extends JPanel implements ActionListener {
     private CardLayout card = new CardLayout();
     private JPanel card1;
     private JPanel card2;
-    private JTable table1,table2;
-    private DefaultTableModel dtm,dtm2;
-    private DefaultTableCellRenderer renderer,renderer1;
-  //  private Iterator<Checking> iterator = null;
-    private Checking checking = null;
+    private JTable table1, table2;
+    private DefaultTableModel dtm, dtm2;
+    private List<Checking> checkings = null;
+    private List<Employee>employees = null;
     private CheckingService checkingService = ServiceFactory.getCheckingServiceInstance();
+    private EmployeeService employeeService = ServiceFactory.getEmployeeServiceInstance();
+    private EmployeeDAO employeeDAO = null;
     private byte[] b;
     private int[] rows;
     private int[] rows2;
@@ -68,6 +73,8 @@ public class CheckPanel extends JPanel implements ActionListener {
         card2 = getCard2();
         centerPanel.add(card2, "2");
         add(BorderLayout.CENTER, centerPanel);
+
+
     }
 
     /**
@@ -77,7 +84,7 @@ public class CheckPanel extends JPanel implements ActionListener {
         card1 = new JPanel();
         table1 = new JTable();
         card1.setLayout(new BorderLayout());
-        card1.setBackground(Color.CYAN);
+        card1.setBackground(Color.red);
         //northPanel
         JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         JButton searchButton = new JButton("搜索");
@@ -86,43 +93,59 @@ public class CheckPanel extends JPanel implements ActionListener {
         searchButton.setBackground(Color.CYAN);
         northPanel.add(searchField);
         northPanel.add(searchButton);
-
         card1.add(BorderLayout.NORTH, northPanel);
 
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keywords = searchField.getText().trim();
+                checkings = checkingService.queryLike(keywords);
+                int count = dtm.getRowCount();
+                for (int i = count - 1; i >= 0; i--) {
+                    dtm.removeRow(i);
+                }
+            }
+        });
+
         //centerPanel
-        dtm=new DefaultTableModel();
-        String[] titles={"编号","工号","时间","性别"};
+        dtm = new DefaultTableModel();
+        String[] titles = {"编号", "工号", "姓名", "时间", "性别"};
         //设置表头标题
         dtm.setColumnIdentifiers(titles);
         //给表格设置数据模型
         table1.setModel(dtm);
         //将单元格内容居中
-        DefaultTableCellRenderer renderer=new DefaultTableCellRenderer();
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         //设置水平居中
         renderer.setHorizontalAlignment(JLabel.CENTER);
-        table1.setDefaultRenderer(Object.class,renderer);
+        table1.setDefaultRenderer(Object.class, renderer);
         //将表头居中
-        DefaultTableCellRenderer renderer1=new DefaultTableCellRenderer();
+        DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer();
         renderer1.setHorizontalAlignment(JLabel.CENTER);
         renderer1.setBackground(Color.LIGHT_GRAY);
         table1.getTableHeader().setDefaultRenderer(renderer1);
         //内容字符串数组
-        String[] content=new String[14];
+        String[] content = new String[5];
         //获取数据库中所有用户信息
-//        checking= CheckingService.
-        List<Checking>list = new ArrayList<>();
-        list= checkingService.get("1001");
-        Iterator<Checking>iterator=list.iterator();
-        while (iterator.hasNext()){
-            Checking checking=iterator.next();
-            content[0]=checking.getCheck_id().toString();
-            content[1]=checking.getAccount();
-            content[2]=checking.getDatetime().toString();
-            content[3]=checking.getCondition();
+        List<Checking> list = new ArrayList<>();
+//        List<Employee> list1 = new ArrayList<>();
+        list = checkingService.get("1001");
+//        list1 = employeeService.get("1001");
+        Iterator<Checking> iterator = list.iterator();
+//        Iterator<Employee>iterator1 = list1.iterator();
+        Employee employee = employeeService.get("1001");
+
+        while (iterator.hasNext()) {
+            Checking checking = iterator.next();
+            content[0] = checking.getCheck_id().toString();
+            content[1] = checking.getAccount();
+            content[2] = employee.getName();
+            content[3] = checking.getDatetime().toString();
+            content[4] = checking.getCondition();
             dtm.addRow(content);
         }
-        JScrollPane jsp=new JScrollPane(table1);
-        card1.add(BorderLayout.CENTER,jsp);
+        JScrollPane jsp = new JScrollPane(table1);
+        card1.add(BorderLayout.CENTER, jsp);
         card1.revalidate();
         centerPanel.revalidate();
         return card1;
@@ -134,15 +157,82 @@ public class CheckPanel extends JPanel implements ActionListener {
      */
     public JPanel getCard2() {
         JPanel card2 = new JPanel();
-        card2.setBackground(Color.orange);
+        card2.setLayout(new BorderLayout());
+        card2.setBackground(Color.white);
+        //northPanel
+        JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JButton searchButton = new JButton("搜索");
+        JTextField searchField = new JTextField();
+        searchButton.setBackground(Color.CYAN);
+        searchField.setPreferredSize(new Dimension(150, 30));
+        northPanel.add(searchField);
+        northPanel.add(searchButton);
+        card2.add(BorderLayout.NORTH, northPanel);
 
 
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String condition = searchField.getText().trim();
+                checkings = checkingService.queryLike(condition);
+                int count = dtm.getRowCount();
+                for (int i = count - 1; i >= 0; i--) {
+                    dtm.removeRow(i);
+                }
+            }
+        });
 
+
+        //centerPanel
+        table2 = new JTable();
+        dtm2 = new DefaultTableModel();
+        String[] titles = {"序号", "工号", "姓名", "职位", "考勤", "时间"};
+        //设置表头标题
+        dtm2.setColumnIdentifiers(titles);
+        //给表格设置数据模型
+        table2.setModel(dtm2);
+        //将单元格内容居中
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        //设置水平居中
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        table2.setDefaultRenderer(Object.class, renderer);
+        //将表头居中
+        DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer();
+        renderer1.setHorizontalAlignment(JLabel.CENTER);
+        renderer1.setBackground(Color.LIGHT_GRAY);
+        table2.getTableHeader().setDefaultRenderer(renderer1);
+        //内容字符串数组
+        String[] content = new String[6];
+        //获取数据库中所有用户信息
+        List<Checking> list = new ArrayList<>();
+//        List<Employee>list1 = new ArrayList<>();
+        list = checkingService.getChecking();
+//        list1 = employeeService.getAll();
+        Iterator<Checking> iterator = list.iterator();
+//        Iterator<Employee> iterator1 = list.iterator();
+        while (iterator.hasNext()) {
+
+
+            Checking checking = iterator.next();
+            Employee employee = employeeService.get(checking.getAccount());
+            content[0] = checking.getCheck_id().toString();
+            content[1] = checking.getAccount();
+            content[2] = employee.getName();
+            content[3] = employee.getPosition();
+            content[4] = checking.getCondition();
+            content[5] = checking.getDatetime().toString();
+            dtm2.addRow(content);
+        }
+        JScrollPane jsp2 = new JScrollPane(table2);
+        jsp2.setPreferredSize(new Dimension(400, 500));
+        card2.add(BorderLayout.CENTER, jsp2);
+        card2.revalidate();
+        centerPanel.revalidate();
 
         return card2;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         JFrame frame = new JFrame("测试窗体");
         frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
