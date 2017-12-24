@@ -22,13 +22,15 @@ public class Style {
    // private final static Color COLOR3 = new Color(0,204,255);
     private final static Color COLOR3 = new Color(51,153,153);
 
-    public static void setGroupButtonStyle(JButton jButton){
-        jButton.setPreferredSize(GROUP_BUTTON);
-        jButton.setFont(GROUP_FONT);
-        jButton.setBackground(COLOR1);
-        jButton.setBorder(null);
-        jButton.setForeground(Color.BLACK);
-        //jButton.setOpaque(false);
+    public static void setGroupButtonStyle(JButton[] jButtons){
+        for(JButton jButton :jButtons) {
+            jButton.setPreferredSize(new Dimension(120,40));
+            jButton.setFont(GROUP_FONT);
+            jButton.setBackground(COLOR1);
+            jButton.setBorder(null);
+            jButton.setForeground(Color.BLACK);
+            //jButton.setOpaque(false);
+        }
     }
 
     public static void setNomalButtonStyle(JButton jButton){

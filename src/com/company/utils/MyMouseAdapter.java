@@ -23,6 +23,6 @@ public class MyMouseAdapter extends MouseAdapter {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        Style.setGroupButtonStyle(jButton);
+      //  Style.setGroupButtonStyle(jButton);
     }
 }

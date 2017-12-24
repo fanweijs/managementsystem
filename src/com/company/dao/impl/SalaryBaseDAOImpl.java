@@ -1,6 +1,7 @@
 package com.company.dao.impl;
 
 import com.company.dao.SalaryBaseDAO;
+import com.company.model.Info;
 import com.company.model.Salary;
 import com.company.utils.JDBCUtil;
 
@@ -20,26 +21,62 @@ public class SalaryBaseDAOImpl implements SalaryBaseDAO {
 
 
     @Override
-    public List<Integer> getCheckAllItem(String account) throws SQLException {
-        Calendar cal = Calendar.getInstance();
-        String year =null;
-        String month=null;
-        System.out.println(cal.get(Calendar.MONTH));
-        //月份=0 即为1月
-        if(cal.get(Calendar.MONTH) == 0){
-            month="12";
-            year= String.valueOf(cal.get(Calendar.YEAR)-1);
-        }else {
-            year = String.valueOf(cal.get(Calendar.YEAR));
-            month =String.valueOf(cal.get(Calendar.MONTH));
+    public int[] getCheckAllItem(String account) throws SQLException {
+        int[]a = new int[4];
+       String time = getTime();
+        String sql = "SELECT * FROM t_checking WHERE  account = ? AND datetime LIKE ? ";
+        List<Object>list = jdbcUtil.excuteQuery(sql,new Object[]{account,time});
+        int later =0;
+        int chuchai =0;
+        int qingjia = 0;
+        int jiaban =0;
+        for(Object object:list){
+            Map<String, Object> map = (Map<String, Object>) object;
+            if(map.get("condition").toString().equals("迟到")){
+              later+=1;
+            }
+            if(map.get("condition").toString().equals("出差")){
+              chuchai+=1;
+            }
+            if(map.get("condition").toString().equals("请假")){
+              qingjia+=1;
+            }
+            if(map.get("condition").toString().equals("加班")){
+              jiaban+=1;
+            }
         }
-
-        return null;
+        a[0]=later;
+        a[1]=chuchai;
+        a[2]=qingjia;
+        a[3]=jiaban;
+        return a;
     }
 
     @Override
-    public List<Integer> getRpAllItem(String account) throws SQLException {
-        return null;
+    public int []getRpAllItem(String account) throws SQLException {
+        String time = getTime();
+        int[]a = new int[]{0,0,0,0};
+
+        String sql ="SELECT * FROM t_rp WHERE  account = ? AND rp_time LIKE ? ";
+        List<Object>list = jdbcUtil.excuteQuery(sql,new Object[]{account,time});
+        for(Object object :list){
+            Map<String, Object> map = (Map<String, Object>) object;
+            String name =map.get("rp_name").toString();
+            if("优秀员工".equals(name)){
+                a[0]+=1;
+            }
+            if("先进个人".equals(name)){
+                a[1]+=1;
+            }
+            if("先进团队".equals(name)){
+                a[2]+=1;
+            }
+            if("全勤奖".equals(name)){
+                a[3]+=1;
+            }
+        }
+
+        return a;
     }
 
     @Override
@@ -61,6 +98,23 @@ public class SalaryBaseDAOImpl implements SalaryBaseDAO {
         String sql = "SELECT * FROM t_salary ";
         List<Object> list = jdbcUtil.excuteQuery(sql, null);
         return getSalaryList(list);
+    }
+    public static String getTime(){
+        Calendar cal = Calendar.getInstance();
+        String year =null;
+        String month=null;
+        System.out.println(cal.get(Calendar.MONTH));
+        //月份=0 即为1月
+        if(cal.get(Calendar.MONTH) == 0){
+            month="12";
+            year= String.valueOf(cal.get(Calendar.YEAR)-1);
+        }else {
+            year = String.valueOf(cal.get(Calendar.YEAR));
+            month =String.valueOf(cal.get(Calendar.MONTH));
+        }
+        String time=year+"-"+month+"-%";
+        return time;
+
     }
 
     public static List<Salary> getSalaryList(List<Object>salaryList){

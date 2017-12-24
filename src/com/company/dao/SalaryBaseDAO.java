@@ -39,7 +39,7 @@ public interface SalaryBaseDAO {
      * @return
      * @throws SQLException
      */
-    List<Integer>getCheckAllItem(String account)throws SQLException;
+    int []getCheckAllItem(String account)throws SQLException;
     /**
      *
      * 得到各项奖惩及次数 顺序如下
@@ -54,7 +54,7 @@ public interface SalaryBaseDAO {
      * 多次迟到
      *
      */
-    List<Integer>getRpAllItem(String account)throws SQLException;
+   int []getRpAllItem(String account)throws SQLException;
 
     /**
      * 获取个人的工资记录

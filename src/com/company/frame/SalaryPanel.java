@@ -2,7 +2,7 @@ package com.company.frame;
 
 import com.company.factory.ServiceFactory;
 import com.company.model.Salary;
-import com.company.service.FinancialAdmin;
+import com.company.service.FinancialAdminService;
 import com.company.service.UserService;
 
 import javax.swing.*;
@@ -11,6 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +29,7 @@ public class SalaryPanel extends JPanel implements ActionListener {
     private DefaultTableModel dtm1;
     private JPanel card2 = new JPanel();
     private UserService userService = ServiceFactory.getUserSerivceInstance();
+    private FinancialAdminService financialAdminService = ServiceFactory.getFinanicalAdminInstance();
 
     public SalaryPanel(List<String>moneyList,String account){
         this.moneyList= moneyList;
@@ -48,20 +51,24 @@ public class SalaryPanel extends JPanel implements ActionListener {
         }
         add(westPanel,BorderLayout.WEST);
         centerPanel.setLayout(card);
-
-        card1 = getCard1();
-        card2 = getCard2();
-
-        centerPanel.add(card1,"1");
-        centerPanel.add(card2,"2");
+        if(moneyList.size()==1){
+            card1 = getCard1();
+            centerPanel.add(card1,"1");
+        }
+        if(moneyList.size()==2){
+            card1 = getCard1();
+            centerPanel.add(card1,"1");
+            card2 = getCard2();
+            centerPanel.add(card2,"2");
+        }
         add(BorderLayout.CENTER,centerPanel);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("个人薪资"))
+        if (e.getActionCommand().equals("个人财务"))
             card.show(centerPanel, "1");
-        if (e.getActionCommand().equals("管理薪资"))
+        if (e.getActionCommand().equals("管理财务"))
             card.show(centerPanel, "2");
 
     }
@@ -97,12 +104,12 @@ public class SalaryPanel extends JPanel implements ActionListener {
     }
     public JPanel getCard2() {
 
-        FinancialAdmin financialAdmin =ServiceFactory.getFinanicalAdminInstance();
+        FinancialAdminService financialAdminService =ServiceFactory.getFinanicalAdminInstance();
         //north
         card2.setLayout(new BorderLayout());
         JPanel card2NorthPanel  = new JPanel();
         card2NorthPanel.setPreferredSize(new Dimension(card2.getWidth(),120));
-        card2NorthPanel.setLayout(new FlowLayout(FlowLayout.CENTER,700,60));
+        card2NorthPanel.setLayout(new FlowLayout(FlowLayout.CENTER,600,60));
         JButton[]jButtons =new JButton[8] ;
         jButtons[0]=new JButton("发放本月工资");
         JTextField jTextField = new JTextField();
@@ -116,6 +123,7 @@ public class SalaryPanel extends JPanel implements ActionListener {
         card2.add(BorderLayout.NORTH,card2NorthPanel);
         //center 表格
         JTable jTable = new JTable();
+        jTable.setEnabled(false);
         dtm1 = new DefaultTableModel();
         String[]titles  ={"工号","姓名","日期","职位等级","基本工资","等级工资","全勤奖","补贴",
                 "应发工资","各项减款","个人保险","税收","实发工资","是否发放"};
@@ -132,15 +140,51 @@ public class SalaryPanel extends JPanel implements ActionListener {
        jTable.getTableHeader().setDefaultRenderer(r1);
         String[] content = new String[14];
         List<Salary>list1 = new ArrayList<>();
-        list1 = financialAdmin.getAllSalary();
+        list1 = financialAdminService.getAllSalary();
         addAllRow(dtm1,list1);
         JScrollPane jScrollPane = new JScrollPane(jTable);
         jScrollPane.setPreferredSize(new Dimension(400,500));
+        jButtons[1].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keywords = jTextField.getText().trim();
+                List<Salary>list = new ArrayList<>();
+                list= financialAdminService.qureyLikeSalary(keywords);
+                int count = dtm1.getRowCount();
+                for (int i = count - 1; i >= 0; i--) {
+                    dtm1.removeRow(i);
+                }
+                for ( Salary salary : list) {
+                    addSalaryRow(salary);
+                }
+            }
+        });
+       jTable.addMouseListener(new MouseAdapter() {
+           @Override
+           public void mouseClicked(MouseEvent e) {
+               if(e.getClickCount()==2){
+                   System.out.println("fanwei");
+               }
+           }
+       });
+
         card2.add(BorderLayout.CENTER,jScrollPane);
         card2.revalidate();
         centerPanel.revalidate();
+        //south
+        JPanel card2SouthPanel =  new JPanel();
+        card2.add(BorderLayout.SOUTH,card2SouthPanel);
         return card2;
     }
+
+    public void addSalaryRow(Salary salary){
+        Object[] rowData = {salary.getAccount(),salary.getName(),salary.getSdate(),salary.getPoistion_level(),
+                salary.getBaseSalary(),salary.getLevelSalary(), salary.getAllChecking(),salary.getSubsidy(),
+                salary.getsSalary(),salary.getLeaveCut(),salary.getSelfInsurance(),salary.getTax(),
+                salary.gettSalary(),salary.getFlag()};
+        dtm1.addRow(rowData);
+    }
+
     public void  addAllRow(DefaultTableModel dtm, List<Salary>list){
         String[]content =  new String[14];
         Iterator<Salary> iterator = list.iterator();
@@ -170,7 +214,7 @@ public class SalaryPanel extends JPanel implements ActionListener {
         frame.setLocationRelativeTo(null);
         List<String> list = new ArrayList<>();
         list.add("个人薪资");
-        list.add("管理薪资");
+        list.add("管理财务");
         frame.add(new SalaryPanel(list,"1001"));
         frame.setVisible(true);
     }

@@ -22,5 +22,8 @@ public class DAOFactory {
     public static SalaryBaseDAO getSalaryBaseInstance(){
         return  new SalaryBaseDAOImpl();
     }
+    public  static PermissionDAO getPermissionInstance(){
+        return  new PermissionDAOImpl();
+    }
 
 }

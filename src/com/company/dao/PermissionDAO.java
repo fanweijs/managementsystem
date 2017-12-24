@@ -58,4 +58,5 @@ public interface PermissionDAO {
      * @throws SQLException
      */
     Map<String,List<String>> getGroupAndItem(String account)throws SQLException;
+    List<String> getAllGroupName(String account)throws  SQLException;
 }

@@ -42,4 +42,34 @@ public class SalaryBaseDAOTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void getCheckAllItem1() {
+        try {
+            int[]a=salaryBaseDAO.getCheckAllItem("1001");
+            for(int c:a){
+                System.out.println(
+                        c
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void getRpAllItem() {
+        try {
+            int[]a=salaryBaseDAO.getRpAllItem("1001");
+            for(int c:a){
+                System.out.println(
+                        c
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
