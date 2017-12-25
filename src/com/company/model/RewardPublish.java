@@ -12,7 +12,8 @@ public class RewardPublish {
     private String rp_name;
     private Date rp_time;
 
-    public RewardPublish(String account, String flag, String rp_name, Date rp_time) {
+    public RewardPublish(Integer id, String account, String flag, String rp_name, Date rp_time) {
+        this.id = id;
         this.account = account;
         this.flag = flag;
         this.rp_name = rp_name;
@@ -64,12 +65,6 @@ public class RewardPublish {
 
     @Override
     public String toString() {
-        return "RewardPublish{" +
-                "id=" + id +
-                ", account='" + account + '\'' +
-                ", flag='" + flag + '\'' +
-                ", rp_name='" + rp_name + '\'' +
-                ", rp_time=" + rp_time +
-                '}';
+        return   " "+ rp_name +"   "+ rp_time;
     }
 }

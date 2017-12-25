@@ -4,17 +4,19 @@ import com.company.dao.EmployeeDAO;
 import com.company.model.Employee;
 import com.company.utils.JDBCUtil;
 
-import java.sql.Date;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by 高展 on 2017/12/19.
  */
-public class EmployeeDAOImpl implements EmployeeDAO {
-    private JDBCUtil jdbcUtil= JDBCUtil.getInitJDBCUtil();
+public class EmployeeDAOImpl implements EmployeeDAO{
+    private JDBCUtil jdbcUtil=JDBCUtil.getInitJDBCUtil();
 
     //根据工号查找员工信息
     @Override
@@ -23,11 +25,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         Map<String,Object>map=jdbcUtil.executeQuerySingle(sql,new Object[]{account});
         if (map.size()!=0){
             Employee employee=new Employee(map.get("account").toString(),
-                                           (Integer)map.get("departmentID"),
+                                           (Integer)map.get("departmentid"),
                                            map.get("name").toString(),
                                            (byte[])map.get("avatar"),
                                            map.get("sex").toString(),
-                                          (Date)map.get("birthday"),
+                                          (Date)map.get("brithday"),
                                            map.get("position").toString(),
                                            map.get("maritalstatus").toString(),
                                            map.get("politiacal_status").toString(),
@@ -45,9 +47,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     //修改员工信息
     @Override
     public int update(Employee employee) throws SQLException {
-        String sql="SELECT t_employee SET departmentID=?,name=?,avatar=?,sex=?,birthday=?,position=?,maritalstatus=?,politiacal_status," +
+        String sql="SELECT t_employee SET account=?,departmentID=?,name=?,avatar=?,sex=?,birthday=?,position=?,maritalstatus=?,politiacal_status," +
                 "education=?,phone=?,native_province=?,native_city=?,date=?";
-        Object[] params={employee.getDepartmentID(),
+        Object[] params={employee.getAccount(),
+                         employee.getDepartmentID(),
                          employee.getName(),
                          employee.getAvatar(),
                          employee.getSex(),
@@ -86,12 +89,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         return n;
     }
 
-    //删除员工信息
+
+
     @Override
-    public int delete(int account) throws SQLException {
-        String sql="SELECT*FROM t_employee WHERE account=?";
-        Object[] params={account};
-        int n=jdbcUtil.executeUpdate(sql,params);
+    public int deleteEmployee(String account) throws SQLException {
+        Connection connection=jdbcUtil.getConnection();
+        String sql="DELETE FROM t_employee WHERE account=?";
+        PreparedStatement ps=connection.prepareStatement(sql);
+        ps.setString(1,account);
+        int n=ps.executeUpdate();
         return n;
     }
 
@@ -109,15 +115,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public List<Employee> queryLike(String keywords) throws SQLException {
         String sql="SELECT*FROM t_employee WHERE CONCAT(account,name,sex,position,maritalstatus,politiacal_status,education)LIKE ?";
         List<Object>list=jdbcUtil.excuteQuery(sql,new Object[]{"%"+keywords+"%"});
-        return getEmployeeList(list);
-    }
-
-    //按条件查找员工信息
-    @Override
-    public List<Employee> queryBy(String condition) throws SQLException {
-        String sql="SELECT*FROM t_employee"+condition;
-        System.out.println(sql);
-        List<Object>list=jdbcUtil.excuteQuery(sql,null);
         return getEmployeeList(list);
     }
 
@@ -148,11 +145,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         for (Object object:list){
             Map<String ,Object>map=(Map<String,Object>) object;
             Employee employee=new Employee(map.get("account").toString(),
-                                           (Integer)map.get("departmentID"),
+                                           (Integer)map.get("departmentid"),
                                            map.get("name").toString(),
                                            (byte[])map.get("avatar"),
                                            map.get("sex").toString(),
-                                           (Date)map.get("birthday"),
+                                           (Date)map.get("brithday"),
                                            map.get("position").toString(),
                                            map.get("maritalstatus").toString(),
                                            map.get("politiacal_status").toString(),

@@ -1,6 +1,7 @@
 package com.company.frame;
 
 import com.company.factory.ServiceFactory;
+import com.company.model.Employee;
 import com.company.model.Salary;
 import com.company.service.FinancialAdminService;
 import com.company.service.UserService;
@@ -51,16 +52,10 @@ public class SalaryPanel extends JPanel implements ActionListener {
         }
         add(westPanel,BorderLayout.WEST);
         centerPanel.setLayout(card);
-        if(moneyList.size()==1){
-            card1 = getCard1();
-            centerPanel.add(card1,"1");
-        }
-        if(moneyList.size()==2){
-            card1 = getCard1();
-            centerPanel.add(card1,"1");
-            card2 = getCard2();
-            centerPanel.add(card2,"2");
-        }
+        card1 = getCard1();
+        centerPanel.add(card1,"1");
+        card2 = getCard2();
+        centerPanel.add(card2,"2");
         add(BorderLayout.CENTER,centerPanel);
     }
 
@@ -70,6 +65,7 @@ public class SalaryPanel extends JPanel implements ActionListener {
             card.show(centerPanel, "1");
         if (e.getActionCommand().equals("管理财务"))
             card.show(centerPanel, "2");
+
 
     }
     public JPanel getCard1() {
@@ -109,7 +105,7 @@ public class SalaryPanel extends JPanel implements ActionListener {
         card2.setLayout(new BorderLayout());
         JPanel card2NorthPanel  = new JPanel();
         card2NorthPanel.setPreferredSize(new Dimension(card2.getWidth(),120));
-        card2NorthPanel.setLayout(new FlowLayout(FlowLayout.CENTER,600,60));
+        card2NorthPanel.setLayout(new FlowLayout(FlowLayout.CENTER,500,60));
         JButton[]jButtons =new JButton[8] ;
         jButtons[0]=new JButton("发放本月工资");
         JTextField jTextField = new JTextField();
@@ -159,6 +155,26 @@ public class SalaryPanel extends JPanel implements ActionListener {
                 }
             }
         });
+        jButtons[0].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getActionCommand().equals("发放本月工资")){
+                  jButtons[0].setText("结束发放");
+                  dtm1.setRowCount(0);
+                List<Salary>salaryList =  financialAdminService.PayOff();
+//                  addAllRow(dtm1,salaryList);
+                  for(Salary salary:salaryList){
+                      addSalaryRow(salary);
+                  }
+                }
+                if (e.getActionCommand().equals("结束发放")){
+                    jButtons[0].setText("发放本月工资");
+                    dtm1.setRowCount(0);
+                     List<Salary> list1 = financialAdminService.getAllSalary();
+                     addAllRow(dtm1,list1);
+                }
+            }
+        });
        jTable.addMouseListener(new MouseAdapter() {
            @Override
            public void mouseClicked(MouseEvent e) {
@@ -178,7 +194,8 @@ public class SalaryPanel extends JPanel implements ActionListener {
     }
 
     public void addSalaryRow(Salary salary){
-        Object[] rowData = {salary.getAccount(),salary.getName(),salary.getSdate(),salary.getPoistion_level(),
+        Employee employee =userService.getEmployee(salary.getAccount());
+        Object[] rowData = {salary.getAccount(),employee.getName(),salary.getSdate(),salary.getPoistion_level(),
                 salary.getBaseSalary(),salary.getLevelSalary(), salary.getAllChecking(),salary.getSubsidy(),
                 salary.getsSalary(),salary.getLeaveCut(),salary.getSelfInsurance(),salary.getTax(),
                 salary.gettSalary(),salary.getFlag()};
@@ -189,9 +206,11 @@ public class SalaryPanel extends JPanel implements ActionListener {
         String[]content =  new String[14];
         Iterator<Salary> iterator = list.iterator();
         while (iterator.hasNext()) {
+
             Salary salary = iterator.next();
+            Employee employee = userService.getEmployee(salary.getAccount());
             content[0] = salary.getAccount();
-            content[1] =salary.getName();
+            content[1] =employee.getName();
             content[2]= salary.getSdate().toString();
             content[3] = String .valueOf(salary.getPoistion_level());
             content[4] = String.valueOf(salary.getBaseSalary());

@@ -1,9 +1,6 @@
 package com.company.frame;
 
-import com.company.utils.ImagePanel;
-
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
 
 /**
@@ -86,8 +83,10 @@ public class FirstPanel extends JPanel {
 //        bgLabel = new JLabel(new ImageIcon(FirstPanel.class.getResource("/img/1.jpg")));
 //        bgLabel.setPreferredSize(new Dimension(600, 250));
         bgLabel = new JLabel();
-        ImagePanel imagePanel = new ImagePanel(1150,350,"1.jpg");
-        upPanel.add(imagePanel);
+        ImageIcon imageIcon2 = new ImageIcon(FirstPanel.class.getResource("/img/1.jpg"));
+        imageIcon2.setImage(imageIcon2.getImage().getScaledInstance(1000,300,Image.SCALE_DEFAULT));
+        bgLabel.setIcon(imageIcon2);
+        upPanel.add(bgLabel);
         downPanel.setLayout(new GridLayout(1,3,50,50));
         downPanel.add(panel1);
         downPanel.add(panel2);

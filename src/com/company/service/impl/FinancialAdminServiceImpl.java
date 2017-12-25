@@ -1,6 +1,7 @@
 package com.company.service.impl;
 
 import com.company.dao.SalaryBaseDAO;
+import com.company.dao.SalaryDAO;
 import com.company.factory.DAOFactory;
 import com.company.model.Salary;
 import com.company.service.FinancialAdminService;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public class FinancialAdminServiceImpl implements FinancialAdminService {
     private SalaryBaseDAO salaryBaseDAO = DAOFactory.getSalaryBaseInstance();
+    private SalaryDAO salaryDAO = DAOFactory.getSalaryDAOInstance();
     @Override
     public List<Salary> getAllSalary() {
         List<Salary>list = new ArrayList<>();
@@ -31,5 +33,17 @@ public class FinancialAdminServiceImpl implements FinancialAdminService {
             e.printStackTrace();
         }
         return list;
+    }
+
+    @Override
+    public List<Salary> PayOff() {
+        List<Salary>list = new ArrayList<>();
+        try {
+           list = salaryDAO.batchInsert();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+
     }
 }

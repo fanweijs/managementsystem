@@ -28,9 +28,9 @@ public interface EmployeeDAO {
     int insert(Employee employee)throws SQLException;
 
     /**
-     * 删除一个员工档案
+     * 删除一个员工
      */
-    int delete(int account)throws SQLException;
+    int deleteEmployee(String account)throws SQLException;
 
     /**
      * 获取所有员工信息
@@ -41,11 +41,6 @@ public interface EmployeeDAO {
      * 关键字模糊查询员工信息
      */
     List<Employee> queryLike(String keywords)throws SQLException;
-
-    /**
-     * 按条件查询员工信息
-     */
-    List<Employee> queryBy(String condition)throws SQLException;
 
 
     int updateEmployee(Employee employee);

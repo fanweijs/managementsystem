@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by xian on 2017/12/20.
+ * Created by 咸赛 on 2017/12/20.
  */
 public class CheckingDAOImpl implements CheckingDAO {
     private JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();

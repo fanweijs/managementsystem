@@ -8,7 +8,6 @@ import java.sql.Date;
  */
 public class Salary {
     private String account;
-    private String name;
     private Date sdate;  //哪个月的工资
     private int poistion_level;//职位等级
     private double baseSalary;//基本工资
@@ -22,32 +21,8 @@ public class Salary {
     private double tSalary;//实发工资
     private String flag;
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public Salary(String account, String name, Date sdate, int poistion_level, double baseSalary,
-                  double levelSalary, double allChecking, double subsidy, double sSalary,
-                  double leaveCut, double selfInsurance, double tax, double tSalary, String flag) {
-        this.account = account;
-        this.name = name;
-        this.sdate = sdate;
-        this.poistion_level = poistion_level;
-        this.baseSalary = baseSalary;
-        this.levelSalary = levelSalary;
-        this.allChecking = allChecking;
-        this.subsidy = subsidy;
-        this.sSalary = sSalary;
-        this.leaveCut = leaveCut;
-        this.selfInsurance = selfInsurance;
-        this.tax = tax;
-        this.tSalary = tSalary;
-        this.flag = flag;
-    }
 
     public Salary(String account, Date sdate, int poistion_level, double baseSalary,
                   double levelSalary, double allChecking, double subsidy, double sSalary,
@@ -178,7 +153,6 @@ public class Salary {
     public String toString() {
         return "Salary{" +
                 "account='" + account + '\'' +
-                ", name='" + name + '\'' +
                 ", sdate=" + sdate +
                 ", poistion_level=" + poistion_level +
                 ", baseSalary=" + baseSalary +

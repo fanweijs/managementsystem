@@ -5,12 +5,10 @@ import com.company.dao.LoginDAO;
 import com.company.dao.PermissionDAO;
 import com.company.dao.SalaryBaseDAO;
 import com.company.factory.DAOFactory;
-import com.company.frame.PermissionPanel;
 import com.company.model.Employee;
 import com.company.model.Login;
 import com.company.model.Salary;
 import com.company.service.UserService;
-import sun.applet.Main;
 
 import java.sql.SQLException;
 import java.util.*;

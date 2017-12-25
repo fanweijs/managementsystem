@@ -1,12 +1,11 @@
 package com.company.dao;
 
 import com.company.model.Info;
-
 import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created by 李宏宇 on 2017/12/19.
+ * Created by lihongyu on 2017/12/19.
  */
 public interface InfoDAO {
     /**

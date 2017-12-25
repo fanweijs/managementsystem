@@ -1,9 +1,11 @@
 package com.company.dao;
 
 import com.company.model.Salary;
+import net.sourceforge.jdatepicker.impl.SqlDateModel;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author  樊委
@@ -14,7 +16,7 @@ public interface SalaryBaseDAO {
     /**
      * 读取个人档案部分信息
      * 工资发放依据
-     * 工龄 现在时间 - 入职时间  每工龄 200 放在补贴里
+     *
      * 职位等级 = 工龄%2 500
      * 职位 人事部管理员 8500
      *      财务部管理员 8400
@@ -24,7 +26,7 @@ public interface SalaryBaseDAO {
      * @return
      * @throws SQLException
      */
-    List<String> getBaseInfo(String account)throws SQLException;
+ Map<String ,Integer> getBaseInfo(String account)throws SQLException;
 
     /**
      * 统计各项考勤种类对应次数
@@ -39,7 +41,7 @@ public interface SalaryBaseDAO {
      * @return
      * @throws SQLException
      */
-    int []getCheckAllItem(String account)throws SQLException;
+    Map<String,Integer>getCheckAllItem(String account)throws SQLException;
     /**
      *
      * 得到各项奖惩及次数 顺序如下
@@ -47,14 +49,14 @@ public interface SalaryBaseDAO {
      * 奖
      * 先进个人
      * 明星员工
-     * 全勤奖
+     *
      * 先进团队
      *
      * 违纪违规
      * 多次迟到
      *
      */
-   int []getRpAllItem(String account)throws SQLException;
+   Map<String,Integer>getRpAllItem(String account)throws SQLException;
 
     /**
      * 获取个人的工资记录
@@ -79,6 +81,14 @@ public interface SalaryBaseDAO {
      * @throws SQLException
      */
     List<Salary>getAllSalary()throws SQLException;
+
+    /**
+     * 插入一条财务记录
+     * @param salary
+     * @return
+     * @throws SQLException
+     */
+    int insertSalary(Salary salary)throws SQLException;
 
 
 }

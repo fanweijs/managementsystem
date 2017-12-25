@@ -3,7 +3,6 @@ package com.company.dao.impl;
 import com.company.dao.InfoDAO;
 import com.company.model.Info;
 import com.company.utils.JDBCUtil;
-
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by 李宏宇 on 2017/12/20.
+ * Created by lihongyu on 2017/12/20.
  */
 public class InfoDAOImpl implements InfoDAO {
     private JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();

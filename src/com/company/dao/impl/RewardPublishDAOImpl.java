@@ -19,8 +19,8 @@ public class RewardPublishDAOImpl implements RewardPublishDAO {
     private JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
     @Override
     public int insertRP(RewardPublish rewardPublish) throws SQLException {
-        String sql = "INSERT INTO t_rp VALUES (null,?,?,?,?) ";
-        Object[] params = {rewardPublish.getAccount(), rewardPublish.getFlag(), rewardPublish.getRp_name(), rewardPublish.getRp_time()};
+        String sql = "INSERT INTO t_rp VALUES (?,?,?,?,?) ";
+        Object[] params = {rewardPublish.getId(),rewardPublish.getAccount(), rewardPublish.getFlag(), rewardPublish.getRp_name(), rewardPublish.getRp_time()};
         int n = jdbcUtil.executeUpdate(sql, params);
         return n;
     }
@@ -48,7 +48,7 @@ public class RewardPublishDAOImpl implements RewardPublishDAO {
         List<RewardPublish> rpList = new ArrayList<>();
         for (Object object : list) {
             Map<String, Object> map = (Map<String, Object>) object;
-            RewardPublish rp = new RewardPublish(map.get("account").toString(), map.get("flag").toString(),
+            RewardPublish rp = new RewardPublish((Integer) map.get("id"),map.get("account").toString(), map.get("flag").toString(),
                     map.get("rp_name").toString(),(Date) map.get("rp_time"));
             //给id设置值
             rp.setId((Integer) map.get("id"));
@@ -88,7 +88,7 @@ public class RewardPublishDAOImpl implements RewardPublishDAO {
         List<RewardPublish> rpList = new ArrayList<>();
         for (Object object : list) {
             Map<String, Object> map = (Map<String, Object>) object;
-            RewardPublish rp = new RewardPublish(map.get("account").toString(), map.get("flag").toString(),
+            RewardPublish rp = new RewardPublish((Integer)map.get("id"),map.get("account").toString(), map.get("flag").toString(),
                     map.get("rp_name").toString(), (Date) map.get("rp_time"));
             //给id设置值
             rp.setId((Integer) map.get("id"));

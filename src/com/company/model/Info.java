@@ -13,7 +13,7 @@ public class Info {
     private String content;
     private Integer department;
 
-    public Info(String id, Date infotime, Object title, String content, String department) {
+    public Info(String s1, String s, String id, Object title, String content) {
     }
 
     public Info(Integer id, Date infotime, String title, String content, Integer department) {
@@ -23,6 +23,8 @@ public class Info {
         this.content = content;
         this.department = department;
     }
+
+
 
     public Integer getId() {
         return id;
@@ -66,12 +68,12 @@ public class Info {
 
     @Override
     public String toString() {
-        return "Info{" +
-                "id=" + id +
-                ", infotime=" + infotime +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", department=" + department +
-                '}';
+        String dept =department==1?"人事部":"财务部";
+        return
+
+                title  +"           "+
+
+                        dept +"          "+infotime
+                ;
     }
 }

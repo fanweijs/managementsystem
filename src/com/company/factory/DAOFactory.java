@@ -2,6 +2,7 @@ package com.company.factory;
 
 import com.company.dao.*;
 import com.company.dao.impl.*;
+import com.company.model.Salary;
 
 public class DAOFactory {
     public static LoginDAO getLoginDAOInstance(){
@@ -25,5 +26,9 @@ public class DAOFactory {
     public  static PermissionDAO getPermissionInstance(){
         return  new PermissionDAOImpl();
     }
+    public static SalaryDAO getSalaryDAOInstance(){
+        return new SalaryDAOImpl();
+    }
+
 
 }

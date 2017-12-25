@@ -20,5 +20,8 @@ public class ServiceFactory {
     public static FinancialAdminService getFinanicalAdminInstance(){
         return  new FinancialAdminServiceImpl();
     }
+    public static InfoService getInfoServiceInstance(){
+        return  new InfoServiceImpl();
+    }
 
 }
